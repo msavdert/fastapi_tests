@@ -1,0 +1,39 @@
+- name: GPU Metrics API Deployment
+  hosts: gpu_server
+  become: yes
+
+  tasks:
+    - name: Update APT packages (Ubuntu) 
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker & Dependencies (Ubuntu)
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Copy project files to server
+      copy:
+        src: ./gpu_metrics/
+        dest: /home/{{ ansible_user }}/gpu_metrics/
+    
+    - name: Deploy Docker Compose stack
+      shell: |
+        cd /home/{{ ansible_user }}/gpu_metrics/
+        docker-compose up -d
