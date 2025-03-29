@@ -1,4 +1,3 @@
-```markdown
 # 🚀 GPU Metrics API
 
 A FastAPI-based API to collect, store, and visualize GPU telemetry data using **PostgreSQL** and **Grafana**.
@@ -14,14 +13,11 @@ A FastAPI-based API to collect, store, and visualize GPU telemetry data using **
 - [Roadmap](#roadmap)
 - [License](#license)
 
----
-
 ## 📌 Overview
 **GPU Metrics API** collects and stores GPU performance telemetry, making it available through a REST API. The stored data is visualized using **Grafana**, and the system is designed to be scalable and easily deployable via **Docker Compose** or **Ansible**.
 
 This project simulates **real-world database API implementations** at companies like NVIDIA.
 
----
 
 ## 🏗 Architecture
 ```
@@ -35,7 +31,6 @@ This project simulates **real-world database API implementations** at companies 
                         +----------------+    
 ```
 
----
 
 ## 🛠 Technologies Used
 - **FastAPI** - High-performance Python web framework
@@ -44,7 +39,6 @@ This project simulates **real-world database API implementations** at companies 
 - **Docker & Docker Compose** - Containerized environment
 - **Ansible** - Automated deployment & server provisioning
 
----
 
 ## 🚀 Setup & Installation
 
@@ -67,7 +61,6 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 API will be available at: [http://localhost:8000/docs](http://localhost:8000/docs)
 
----
 
 ## 🐳 Deployment with Docker Compose
 ### 1️⃣ Start Services
@@ -80,7 +73,6 @@ docker-compose up -d
 docker-compose down
 ```
 
----
 
 ## 🤖 Deployment with Ansible
 1️⃣ **Update Inventory File (`hosts.ini`)**
@@ -94,7 +86,6 @@ docker-compose down
 ansible-playbook -i hosts.ini deploy.yml
 ```
 
----
 
 ## 🔗 API Endpoints
 | Method | Endpoint          | Description                     |
@@ -105,7 +96,6 @@ ansible-playbook -i hosts.ini deploy.yml
 
 Full API documentation is available at: [http://localhost:8000/docs](http://localhost:8000/docs)
 
----
 
 ## 🛤 Roadmap
 ### 🔹 1️⃣ Define Requirements & Architecture
@@ -127,9 +117,6 @@ Full API documentation is available at: [http://localhost:8000/docs](http://loca
 ### 🔹 5️⃣ Integrate Grafana for Visualization
 - Configure dashboards to monitor GPU performance.
 
----
 
 ## 📜 License
 This project is licensed under the MIT License.
-```
-
