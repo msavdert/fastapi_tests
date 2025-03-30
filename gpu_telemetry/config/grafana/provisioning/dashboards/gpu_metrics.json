@@ -86,8 +86,27 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "gpu_temperature",
+          "expr": "gpu_temperature{gpu_id=\"1\"}",
+          "legendFormat": "RTX 4090",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_temperature{gpu_id=\"2\"}",
+          "legendFormat": "RTX 3080",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_temperature{gpu_id=\"3\"}",
+          "legendFormat": "RTX 3060",
+          "refId": "C"
         }
       ],
       "title": "GPU Temperature",
@@ -171,8 +190,27 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "gpu_power_usage",
+          "expr": "gpu_power_usage{gpu_id=\"1\"}",
+          "legendFormat": "RTX 4090",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_power_usage{gpu_id=\"2\"}",
+          "legendFormat": "RTX 3080",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_power_usage{gpu_id=\"3\"}",
+          "legendFormat": "RTX 3060",
+          "refId": "C"
         }
       ],
       "title": "GPU Power Usage",
@@ -256,8 +294,27 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "gpu_memory_usage",
+          "expr": "gpu_memory_usage{gpu_id=\"1\"}",
+          "legendFormat": "RTX 4090",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_memory_usage{gpu_id=\"2\"}",
+          "legendFormat": "RTX 3080",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_memory_usage{gpu_id=\"3\"}",
+          "legendFormat": "RTX 3060",
+          "refId": "C"
         }
       ],
       "title": "GPU Memory Usage",
@@ -341,8 +398,27 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "gpu_utilization",
+          "expr": "gpu_utilization{gpu_id=\"1\"}",
+          "legendFormat": "RTX 4090",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_utilization{gpu_id=\"2\"}",
+          "legendFormat": "RTX 3080",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "gpu_utilization{gpu_id=\"3\"}",
+          "legendFormat": "RTX 3060",
+          "refId": "C"
         }
       ],
       "title": "GPU Utilization",

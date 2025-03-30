@@ -17,10 +17,10 @@ app = FastAPI(
 )
 
 # Initialize Prometheus metrics
-gpu_temperature = Gauge('gpu_temperature', 'GPU temperature in Celsius')
-gpu_power_usage = Gauge('gpu_power_usage', 'GPU power usage in watts')
-gpu_memory_usage = Gauge('gpu_memory_usage', 'GPU memory usage in MB')
-gpu_utilization = Gauge('gpu_utilization', 'GPU utilization percentage')
+gpu_temperature = Gauge('gpu_temperature', 'GPU temperature in Celsius', ['gpu_id'])
+gpu_power_usage = Gauge('gpu_power_usage', 'GPU power usage in watts', ['gpu_id'])
+gpu_memory_usage = Gauge('gpu_memory_usage', 'GPU memory usage in MB', ['gpu_id'])
+gpu_utilization = Gauge('gpu_utilization', 'GPU utilization percentage', ['gpu_id'])
 telemetry_requests = Counter('telemetry_requests_total', 'Total number of telemetry requests')
 
 # Initialize Prometheus instrumentator
@@ -52,11 +52,12 @@ def read_gpu(gpu_id: int, db: Session = Depends(get_db)):
 
 @app.post("/telemetry/", response_model=schemas.GPUTelemetry)
 def create_telemetry(telemetry: schemas.GPUTelemetryCreate, db: Session = Depends(get_db)):
-    # Update Prometheus metrics
-    gpu_temperature.set(telemetry.temperature)
-    gpu_power_usage.set(telemetry.power_usage)
-    gpu_memory_usage.set(telemetry.memory_usage)
-    gpu_utilization.set(telemetry.gpu_utilization)
+    # Update Prometheus metrics with GPU ID
+    gpu_id = str(telemetry.gpu_id)
+    gpu_temperature.labels(gpu_id=gpu_id).set(telemetry.temperature)
+    gpu_power_usage.labels(gpu_id=gpu_id).set(telemetry.power_usage)
+    gpu_memory_usage.labels(gpu_id=gpu_id).set(telemetry.memory_usage)
+    gpu_utilization.labels(gpu_id=gpu_id).set(telemetry.gpu_utilization)
     telemetry_requests.inc()
 
     db_telemetry = models.GPUTelemetry(**telemetry.dict())
