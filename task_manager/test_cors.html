@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        .error {
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+    </style>
+</head>
+<body>
+    <h1>CORS Test Page</h1>
+    
+    <h2>Test 1: Register User</h2>
+    <button onclick="testRegister()">Test Register</button>
+    <div id="registerResult" class="result"></div>
+
+    <h2>Test 2: Login</h2>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="loginResult" class="result"></div>
+
+    <h2>Test 3: Get Tasks (with token)</h2>
+    <button onclick="testGetTasks()">Test Get Tasks</button>
+    <div id="tasksResult" class="result"></div>
+
+    <script>
+        let token = '';
+
+        async function testRegister() {
+            try {
+                const response = await fetch('http://localhost:8000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'test' + Date.now() + '@example.com',
+                        username: 'testuser' + Date.now(),
+                        password: 'Test123!@#'
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('registerResult').innerHTML = 
+                    `Status: ${response.status}<br>Response: ${JSON.stringify(data)}`;
+                document.getElementById('registerResult').className = 
+                    `result ${response.ok ? 'success' : 'error'}`;
+            } catch (error) {
+                document.getElementById('registerResult').innerHTML = 
+                    `Error: ${error.message}`;
+                document.getElementById('registerResult').className = 'result error';
+            }
+        }
+
+        async function testLogin() {
+            try {
+                const response = await fetch('http://localhost:8000/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'username=testuser&password=Test123!@#'
+                });
+                const data = await response.json();
+                token = data.access_token;
+                document.getElementById('loginResult').innerHTML = 
+                    `Status: ${response.status}<br>Response: ${JSON.stringify(data)}`;
+                document.getElementById('loginResult').className = 
+                    `result ${response.ok ? 'success' : 'error'}`;
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = 
+                    `Error: ${error.message}`;
+                document.getElementById('loginResult').className = 'result error';
+            }
+        }
+
+        async function testGetTasks() {
+            if (!token) {
+                document.getElementById('tasksResult').innerHTML = 
+                    'Please login first to get a token';
+                document.getElementById('tasksResult').className = 'result error';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8000/tasks/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('tasksResult').innerHTML = 
+                    `Status: ${response.status}<br>Response: ${JSON.stringify(data)}`;
+                document.getElementById('tasksResult').className = 
+                    `result ${response.ok ? 'success' : 'error'}`;
+            } catch (error) {
+                document.getElementById('tasksResult').innerHTML = 
+                    `Error: ${error.message}`;
+                document.getElementById('tasksResult').className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html> 

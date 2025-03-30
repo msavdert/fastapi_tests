@@ -1,16 +1,12 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-import os
-from dotenv import load_dotenv
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from config import settings
 
-# .env dosyasını yükleyelim
-load_dotenv()
-
-# PostgreSQL bağlantı URL'si
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/task_db")
+SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 
 # SQLAlchemy motorunu oluşturuyoruz
-engine = create_engine(DATABASE_URL)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 # Oturum (session) oluşturmak için sessionmaker kullanıyoruz
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

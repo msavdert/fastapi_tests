@@ -1,26 +1,40 @@
+version: '3.8'
+
 services:
-  db:
-    image: postgres
-    container_name: postgres_container
+  web:
+    build: .
+    ports:
+      - "8443:8443"  # HTTPS port
+    volumes:
+      - .:/app
+      - ./ssl:/app/ssl  # Mount SSL certificates without read-only flag
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy   # DB sağlıklı olmadan başlamaz
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: task_db
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/taskdb
+      - HTTPS_ENABLED=true
+      - SSL_KEYFILE=/app/ssl/private.key
+      - SSL_CERTFILE=/app/ssl/certificate.crt
+    command: uvicorn main:app --host 0.0.0.0 --port 8443 --ssl-keyfile /app/ssl/private.key --ssl-certfile /app/ssl/certificate.crt --reload
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=taskdb
     ports:
       - "5432:5432"
     healthcheck:   # Sağlık kontrolü ekleyelim
-      test: ["CMD-SHELL", "pg_isready -U user -d task_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d taskdb"]
       interval: 5s
       retries: 5
       timeout: 3s
 
-  api:
-    build: .
-    container_name: fastapi_container
-    depends_on:
-      db:
-        condition: service_healthy   # DB sağlıklı olmadan başlamaz
-    ports:
-      - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql://user:password@db/task_db
+volumes:
+  postgres_data:
